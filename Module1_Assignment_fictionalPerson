@@ -1,0 +1,22 @@
+#include<iostream> // input-output stream for displaying data
+
+using namespace std;
+
+int main() {
+	// declare the appropriate variables for the fictional person
+	string firstName = "Cassandra";
+	string lastName = "Bailey";
+	string streetAddress = "567 E Second Street";
+	string city = "Fictional City";
+	string zipCode = "09284";
+
+	// Display the information above ^
+	cout << "First Name: " << firstName << endl;
+	cout << "Last Name: " << lastName << endl;
+	cout << "Street Address: " << streetAddress << endl;
+	cout << "City: " << city << endl;
+	cout << "Zip Code: " << zipCode << endl;
+
+	// return 0 to indicate that the program finished successfully
+	return 0;
+}
