@@ -17,7 +17,7 @@ int main() {
         std::getline(std::cin, stringOne);
         
         //get the second string from the user
-        std::cout << "Enter your second string(Input " << i + 1 <<"): ";
+        std::cout << "Enter your second string (Input " << i + 1 <<"): ";
         // get the second string and allow for spaces
         std::getline(std::cin, stringTwo);
         
