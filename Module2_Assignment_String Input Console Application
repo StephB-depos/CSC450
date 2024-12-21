@@ -1,0 +1,33 @@
+#include <iostream>
+// use the string data type
+#include <string>
+
+int main() {
+    // declare our two string variables
+    std::string stringOne;
+    std::string stringTwo;
+    
+    // print Lets Concatenate Two strings
+    std::cout << "Let's Concatenate Two Strings!"<< "\n\n";
+    // loop to take input and concatenate the users strings 3 times
+    for (int i = 0; i < 3; i++) {
+        // get first string from user
+        std::cout << "Enter your first string (Input "<< i + 1 <<"): ";
+        // get the first string and allow for spaces
+        std::getline(std::cin, stringOne);
+        
+        //get the second string from the user
+        std::cout << "Enter your second string(Input " << i + 1 <<"): ";
+        // get the second string and allow for spaces
+        std::getline(std::cin, stringTwo);
+        
+        // Concantenate our two strings from user
+        std::string concResult = stringOne + stringTwo;
+        
+        // print out the concatenated concResult
+        std::cout << "Here is your concatenated result!\n";
+        std::cout << "Result: " << concResult << "\n\n";
+    }
+    // exit the loop
+    return 0;
+}
