@@ -1,0 +1,48 @@
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    // three integer values
+    int intOne; // will hold our first integer
+    int intTwo; // will hold our second integer
+    int intThree; // will hold our third integer
+    
+    // ask the user for the three integers
+    cout << "Please enter three integer values: " << endl; // let the user know they need to input integers
+    cout << "First integer: "; // ask for first int
+    cin >> intOne; // store into our variable to hold the first integer
+    cout << "Second integer: "; // ask user for second int
+    cin >> intTwo; // store user int into the variable to hold second integer
+    cout << "Third integer: "; // ask user for third int
+    cin >> intThree; // store third int in variable
+    
+    // Create our pointers for the three integers using 'new' operator
+    int* pointer1 = new int; // our first pointer for our first integer
+    int* pointer2 = new int; // our second pointer for our second integer
+    int* pointer3 = new int; // our third pointer for our third integer
+    
+    // assign our pointers to our integer values
+    *pointer1 = intOne; // assigns pointer one to our first user integer
+    *pointer2 = intTwo; // assigns pointer two to our second user integer
+    *pointer3 = intThree; // assigns pointer three to our third user integer
+    
+    // display what is stored in our integer variables
+    cout << "Here are the stored values: " << endl;
+    cout << "Value one: " << intOne << endl;
+    cout << "Value two: " << intTwo << endl;
+    cout << "Value three: " << intThree << endl;
+    
+    // display our pointers
+    cout << "Here are the values in our pointers (value in dynamic memory): " << endl; 
+    cout << "Pointer one: " << *pointer1 << endl; // dereference pointer one to display value
+    cout << "Pointer two: " << *pointer2 << endl; // dereference pointer two to display value
+    cout << "Pointer three: " << *pointer3 << endl; // dereference pointer three to display value
+    
+    // use the delete operator to free up memory in our pointer
+    delete pointer1; // free the memory pointed to by pointer one
+    delete pointer2; // free the memory pointed to by pointer two
+    delete pointer3; // free the memory pointed to by pointer three
+    
+    return 0;
+}
