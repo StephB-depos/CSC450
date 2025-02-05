@@ -1,0 +1,53 @@
+#include <iostream> // For input/output operations
+#include <thread> // For std::thread
+#include <mutex> // For std::mutex
+#include <condition_variable> // For std::condition_variable
+#include <stdexcept> // For std::runtime_error
+
+std::mutex mtx; // Mutex for synchronizing access to shared resources
+std::condition_variable cv; // Condition variable for thread synchronization
+bool first_thread_finished = false; // Flag to indicate when first thread has finished
+int counter = 0; // Shared counter variable
+
+void count(bool count_up, int start, int end, int step) {
+    try {
+        std::unique_lock<std::mutex> lock(mtx);  // Acquire lock on mutex
+        
+        if (!count_up) { // If counting down, wait for the first thread to finish
+            cv.wait(lock, [] { return first_thread_finished; });
+        }
+        
+        for (int i = start; count_up ? (i <= end) : (i >= end); i += step) { // Loop for counting
+            counter = i; // Update shared counter
+            std::cout << "Thread " << (count_up ? "1: Counting up" : "2: Counting down")
+                      << " - " << counter << std::endl; // Print current count
+            std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Simulate work
+        }
+        
+        if (count_up) { // If counting up, signal that the first thread is finished
+            first_thread_finished = true; // switch to true when finished
+            cv.notify_one(); // Notify waiting thread
+        }
+    } catch (const std::exception& e) {
+        std::cerr << "Exception in count: " << e.what() << std::endl; // Log any exceptions
+    }
+}
+
+int main() {
+    try {
+        std::thread t1(count, true, 1, 20, 1); //Create and start thread1 (counting up)
+        std::thread t2(count, false, 20, 0, -1); // create and start thread2 (counting down)
+
+        if (!t1.joinable() || !t2.joinable()) { // check if threads were created successfully
+            throw std::runtime_error("Failed to create threads"); // Throw exception 
+        }
+
+        t1.join(); // Wait for thread1 to finish
+        t2.join(); // Wait for thread2 to finish
+    } catch (const std::exception& e) {
+        std::cerr << "Exception in main: " << e.what() << std::endl; // Log any exceptions
+        return 1; // Return error code
+    }
+
+    return 0; // Return success code
+}
