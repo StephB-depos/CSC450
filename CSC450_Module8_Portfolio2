@@ -1,0 +1,78 @@
+//Import necessary classes for concurrent programming
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+//Define the main class CounterThreads
+public class CounterThreads {
+ 
+ // ReentrantLock for thread synchronization
+ private static final Lock lock = new ReentrantLock();
+ 
+ // Create a Condition variable for thread communication
+ private static final Condition cv = lock.newCondition();
+ 
+ // Flag set to false so to indicate when the first thread has finished
+ private static boolean firstThreadFinished = false;
+ 
+ // Shared counter variable set to 0
+ private static int counter = 0;
+
+ // Method to count up or down
+ private static void count(boolean countUp, int start, int end, int step) {
+     try {
+         // Acquire the lock
+         lock.lock();
+         // If counting down, wait until the first thread has finished
+         if (!countUp) {
+             while (!firstThreadFinished) {
+                 // Wait for the signal from the first thread
+                 cv.await();
+             }
+         }
+
+         // Loop for counting up or down
+         for (int i = start; countUp ? (i <= end) : (i >= end); i += step) {
+             // Update the shared counter
+             counter = i;
+             // Print the current count
+             System.out.println("Thread " + (countUp ? "1: Counting up" : "2: Counting down")
+                     + " - " + counter);
+             // Simulate work by sleeping for 100 milliseconds
+             Thread.sleep(100);
+         }
+
+         // If counting up, set the flag and notify the waiting thread
+         if (countUp) {
+             firstThreadFinished = true;
+             cv.signal();
+         }
+     } catch (InterruptedException e) {
+         // Handle interruption
+         System.err.println("Thread has been interrupted: " + e.getMessage());
+     } finally {
+         // Always release the lock
+         lock.unlock();
+     }
+ }
+
+ // Main method - entry point of the program
+ public static void main(String[] args) {
+     // Create a thread for counting up
+     Thread t1 = new Thread(() -> count(true, 1, 20, 1));
+     // Create a thread for counting down
+     Thread t2 = new Thread(() -> count(false, 20, 0, -1));
+
+     try {
+         // Start both threads
+         t1.start();
+         t2.start();
+         // Wait for both threads to finish
+         t1.join();
+         t2.join();
+     } catch (InterruptedException e) {
+         // Handle interruption of the main thread
+         System.err.println("Main thread has been interrupted: " + e.getMessage());
+     }
+ }
+}
